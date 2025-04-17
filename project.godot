@@ -17,8 +17,8 @@ config/icon="res://icon.svg"
 
 [display]
 
-window/size/viewport_width=1200
-window/size/viewport_height=900
+window/size/viewport_width=2160
+window/size/viewport_height=1620
 window/size/initial_position_type=2
 window/vsync/vsync_mode=2
 
@@ -34,6 +34,10 @@ theme/custom="uid://riggg7154rx2"
 
 pointing/emulate_touch_from_mouse=true
 pointing/emulate_mouse_from_touch=false
+
+[physics]
+
+common/physics_ticks_per_second=40
 
 [rendering]
 

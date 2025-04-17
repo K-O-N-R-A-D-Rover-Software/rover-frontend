@@ -11,7 +11,7 @@ extends Control
 @export var pressed_color := Color.GRAY
 
 ## If the input is inside this range, the output is zero.
-@export_range(0, 200, 1) var deadzone_size : float = 10
+@export_range(0, 200, 1) var deadzone_size : float = 0
 
 ## The max distance the tip can reach.
 @export_range(0, 500, 1) var clampzone_size : float = 75
@@ -130,9 +130,7 @@ func _update_joystick(touch_position: Vector2) -> void:
 	
 	if joystick_mode == Joystick_mode.FOLLOWING and touch_position.distance_to(center) > clampzone_size:
 		_move_base(touch_position - vector)
-	
 	_move_tip(center + vector)
-	
 	if vector.length_squared() > deadzone_size * deadzone_size:
 		is_pressed = true
 		output = (vector - (vector.normalized() * deadzone_size)) / (clampzone_size - deadzone_size)

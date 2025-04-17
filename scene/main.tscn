@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" uid="uid://2cm5svv2xo65" path="res://script/main.gd" id="1_itxqv"]
 [ext_resource type="Theme" uid="uid://riggg7154rx2" path="res://theme.tres" id="2_v0l8b"]
-[ext_resource type="Script" uid="uid://dwc7qkxnun3yg" path="res://addons/virtual_joystick/virtual_joystick_instantiator.gd" id="3_0ha60"]
 [ext_resource type="Script" uid="uid://c1e4ekc8iyqvh" path="res://scene/cameraStream.gd" id="3_brvut"]
+[ext_resource type="PackedScene" uid="uid://dmr0fcamx7t56" path="res://addons/virtual_joystick/virtual_joystick_scene.tscn" id="5_0ha60"]
 
-[node name="Control" type="Control"]
+[node name="Control" type="Control" node_paths=PackedStringArray("joystick1", "joystick2")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,6 +15,8 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_itxqv")
+joystick1 = NodePath("VBoxContainer/HBoxContainer/Virtual Joystick")
+joystick2 = NodePath("VBoxContainer/HBoxContainer/Virtual Joystick2")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -36,17 +38,18 @@ layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("2_v0l8b")
 
+[node name="Virtual Joystick" parent="VBoxContainer/HBoxContainer" instance=ExtResource("5_0ha60")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Virtual Joystick2" parent="VBoxContainer/HBoxContainer" instance=ExtResource("5_0ha60")]
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_v0l8b")
-
-[node name="Virtual Joystick" type="Control" parent="VBoxContainer/HBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 2.5
-script = ExtResource("3_0ha60")
-metadata/_custom_type_script = "uid://dwc7qkxnun3yg"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -62,6 +65,9 @@ layout_mode = 2
 size_flags_vertical = 3
 text = "runter"
 
+[node name="VSlider" type="VSlider" parent="VBoxContainer/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+
 [node name="Button" type="Button" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -72,10 +78,5 @@ text = "test"
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Virtual Joystick2" type="Control" parent="VBoxContainer/HBoxContainer/Control2"]
-layout_mode = 2
-size_flags_horizontal = 3
-script = ExtResource("3_0ha60")
-metadata/_custom_type_script = "uid://dwc7qkxnun3yg"
-
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer/HBoxContainer/VSlider" to="." method="_on_v_slider1_value_changed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Button" to="." method="_on_button_pressed"]
