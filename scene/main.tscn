@@ -42,28 +42,10 @@ theme = ExtResource("2_v0l8b")
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Virtual Joystick2" parent="VBoxContainer/HBoxContainer" instance=ExtResource("5_0ha60")]
-layout_mode = 2
-size_flags_horizontal = 3
-
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_v0l8b")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-text = "hoch"
-
-[node name="Button2" type="Button" parent="VBoxContainer/HBoxContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-text = "runter"
 
 [node name="VSlider" type="VSlider" parent="VBoxContainer/HBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -74,7 +56,21 @@ size_flags_horizontal = 3
 action_mode = 0
 text = "test"
 
-[node name="Control2" type="CenterContainer" parent="VBoxContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "auf"
+
+[node name="Button2" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "zu"
+
+[node name="Virtual Joystick2" parent="VBoxContainer/HBoxContainer" instance=ExtResource("5_0ha60")]
 layout_mode = 2
 size_flags_horizontal = 3
 
