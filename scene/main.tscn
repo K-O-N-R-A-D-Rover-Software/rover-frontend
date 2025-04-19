@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://d0ykwxea8l0d5"]
 
-[ext_resource type="Script" uid="uid://2cm5svv2xo65" path="res://script/main.gd" id="1_itxqv"]
+[ext_resource type="Script" uid="uid://2cm5svv2xo65" path="res://scripts/scrsht/script/main.gd" id="1_itxqv"]
 [ext_resource type="Theme" uid="uid://riggg7154rx2" path="res://theme.tres" id="2_v0l8b"]
 [ext_resource type="Script" uid="uid://c1e4ekc8iyqvh" path="res://scene/cameraStream.gd" id="3_brvut"]
 [ext_resource type="PackedScene" uid="uid://dmr0fcamx7t56" path="res://addons/virtual_joystick/virtual_joystick_scene.tscn" id="5_0ha60"]

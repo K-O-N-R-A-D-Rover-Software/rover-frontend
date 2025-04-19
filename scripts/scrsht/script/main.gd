@@ -38,7 +38,7 @@ func _input(event: InputEvent) -> void:
 func _on_button_pressed() -> void:
 	while true:
 		await get_tree().create_timer(.1).timeout
-		$VBoxContainer/TextureRect.getFrame()
+		$VBoxContainer/StatusColor/Video.getFrame()
 	print("frame")
 
 func _on_v_slider_value_changed(value: float) -> void:

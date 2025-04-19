@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cadsa3ican0bb"
-path="res://.godot/imported/IMG_3881518587.webp-5fc8eda2b4dd92e63b54478d727cb8be.ctex"
+uid="uid://3psrpngsamto"
+path="res://.godot/imported/touchscreenjoystickicon.png-29a4e3d91a67a798c8e1e92140308e5a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scrsht/IMG_3881518587.webp"
-dest_files=["res://.godot/imported/IMG_3881518587.webp-5fc8eda2b4dd92e63b54478d727cb8be.ctex"]
+source_file="res://scripts/scrsht/script/touchscreenjoystickicon.png"
+dest_files=["res://.godot/imported/touchscreenjoystickicon.png-29a4e3d91a67a798c8e1e92140308e5a.ctex"]
 
 [params]
 

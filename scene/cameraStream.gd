@@ -1,17 +1,15 @@
 extends TextureRect
 
 var image = Image.new()
-
+var http_request : HTTPRequest
 var index = 0
 
 func _ready():
-	pass
-	# Create an HTTP request node and connect its completion signal.
-		
-func getFrame():
 	var http_request = HTTPRequest.new()
 	add_child(http_request)
-	http_request.request_completed.connect(self._http_request_completed)
+	http_request.request_completed.connect(_http_request_completed)
+		
+func getFrame():
 	var error
 	match index:
 		0:
@@ -19,7 +17,7 @@ func getFrame():
 			index = 0
 		1:
 			error = http_request.request("http://roverpi.local:1984/api/frame.jpeg?src=2")
-			index = 0
+			index = 1
 #	var error = http_request.request("https://fastly.picsum.photos/id/316/200/200.jpg?hmac=f0i62VkjVy8OPLP77Xf7mdZa3UBNlTOXFm9WpDMOiiA")
 	if error != OK:
 		push_error("An error occurred in the HTTP request.")
