@@ -14,7 +14,7 @@ var streaming = false
 func _ready():
 	#peer.set_dest_address("127.0.0.1", 5000)
 	#peer.set_dest_address("10.42.0.1", 5000)
-	%StatusColor.color = Color.DARK_RED
+	if not connected: %StatusColor.color = Color.DARK_RED
 	peer.set_dest_address("192.168.178.105", 5000)
 	while not connected:
 		sendToPi("handshake")
@@ -29,7 +29,7 @@ func _process(delta:float):
 	
 func _physics_process(delta: float):
 	if peer.get_available_packet_count() > 0:
-		print("Connected: %s" % peer.get_packet().get_string_from_utf8())
+		print("recieved: %s" % peer.get_packet().get_string_from_utf8())
 	
 func _input(event: InputEvent) -> void:
 	a = joystick1.output.angle()
