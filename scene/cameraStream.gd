@@ -1,14 +1,19 @@
 extends TextureRect
 
 var image = Image.new()
-var http_request : HTTPRequest
+var http_request = HTTPRequest.new()
 var index = 0
 
 func _ready():
-	var http_request = HTTPRequest.new()
+	
+	print("Neckpop: ",http_request)
+	
 	add_child(http_request)
 	http_request.request_completed.connect(_http_request_completed)
-		
+	
+	print("Phatass. ",http_request)
+	
+	
 func getFrame():
 	var error
 	match index:
