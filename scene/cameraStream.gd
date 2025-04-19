@@ -2,7 +2,7 @@ extends TextureRect
 
 var image = Image.new()
 var http_request = HTTPRequest.new()
-var index = 0
+var index = 1
 
 func _ready():
 	
@@ -21,7 +21,7 @@ func getFrame():
 			error = http_request.request("http://raspi.local:1984/api/stream.mjpeg?src=1")
 			index = 0
 		1:
-			error = http_request.request("http://roverpi.local:1984/api/frame.jpeg?src=2")
+			error = http_request.request("https://mjpeg.sanford.io/count.mjpeg")
 			index = 1
 #	var error = http_request.request("https://fastly.picsum.photos/id/316/200/200.jpg?hmac=f0i62VkjVy8OPLP77Xf7mdZa3UBNlTOXFm9WpDMOiiA")
 	if error != OK:
