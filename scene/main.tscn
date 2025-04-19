@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://c1e4ekc8iyqvh" path="res://scene/cameraStream.gd" id="3_brvut"]
 [ext_resource type="PackedScene" uid="uid://dmr0fcamx7t56" path="res://addons/virtual_joystick/virtual_joystick_scene.tscn" id="5_0ha60"]
 
-[node name="Control" type="Control" node_paths=PackedStringArray("joystick1", "joystick2")]
+[node name="Interface" type="Control" node_paths=PackedStringArray("joystick1", "joystick2")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -42,7 +42,15 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="Video" type="TextureRect" parent="VBoxContainer/StatusColor"]
-layout_mode = 2
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -2160.0
+offset_bottom = -487.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_vertical = 3
 expand_mode = 2
 stretch_mode = 5
@@ -95,19 +103,18 @@ theme = ExtResource("2_v0l8b")
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer"]
+[node name="HBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_v0l8b")
 
-[node name="VSlider" type="VSlider" parent="VBoxContainer/HBoxContainer/HBoxContainer"]
-layout_mode = 2
-
-[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="Button" type="CheckButton" parent="VBoxContainer/HBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme = ExtResource("2_v0l8b")
 action_mode = 0
-text = "test"
+text = "streamen"
+alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -127,5 +134,8 @@ text = "zu"
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 2
 
-[connection signal="value_changed" from="VBoxContainer/HBoxContainer/HBoxContainer/VSlider" to="." method="_on_v_slider1_value_changed"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="toggled" from="VBoxContainer/HBoxContainer/HBoxContainer/Button" to="." method="_on_streaming_toggled"]
+[connection signal="button_down" from="VBoxContainer/HBoxContainer/VBoxContainer/Button" to="." method="_greifer_auf"]
+[connection signal="button_up" from="VBoxContainer/HBoxContainer/VBoxContainer/Button" to="." method="_greifer_stop"]
+[connection signal="button_down" from="VBoxContainer/HBoxContainer/VBoxContainer/Button2" to="." method="_greifer_zu"]
+[connection signal="button_up" from="VBoxContainer/HBoxContainer/VBoxContainer/Button2" to="." method="_greifer_stop"]

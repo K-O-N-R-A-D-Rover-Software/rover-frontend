@@ -10,7 +10,6 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
-corner_detail = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cjfk0"]
 content_margin_left = 4.0
@@ -22,10 +21,11 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
-corner_detail = 6
 
 [resource]
 BoxContainer/constants/separation = 10
+Button/font_sizes/font_size = 42
+CheckButton/font_sizes/font_size = 45
 VSlider/styles/grabber_area = null
 VSlider/styles/grabber_area_highlight = SubResource("StyleBoxFlat_e1x85")
 VSlider/styles/slider = SubResource("StyleBoxFlat_cjfk0")
