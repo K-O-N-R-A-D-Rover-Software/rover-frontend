@@ -108,13 +108,29 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_v0l8b")
 
-[node name="Button" type="CheckButton" parent="VBoxContainer/HBoxContainer/HBoxContainer"]
+[node name="StreamToggle" type="CheckButton" parent="VBoxContainer/HBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_v0l8b")
 action_mode = 0
 text = "streamen"
 alignment = 1
+
+[node name="ConnectionToggle" type="CheckButton" parent="VBoxContainer/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_v0l8b")
+button_pressed = true
+action_mode = 0
+text = "verbinden"
+alignment = 1
+
+[node name="LastPingLabel" type="RichTextLabel" parent="VBoxContainer/HBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_v0l8b")
+fit_content = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -134,7 +150,8 @@ text = "zu"
 custom_minimum_size = Vector2(500, 500)
 layout_mode = 2
 
-[connection signal="toggled" from="VBoxContainer/HBoxContainer/HBoxContainer/Button" to="." method="_on_streaming_toggled"]
+[connection signal="toggled" from="VBoxContainer/HBoxContainer/HBoxContainer/StreamToggle" to="." method="_on_streaming_toggled"]
+[connection signal="toggled" from="VBoxContainer/HBoxContainer/HBoxContainer/ConnectionToggle" to="." method="_on_connection_toggle"]
 [connection signal="button_down" from="VBoxContainer/HBoxContainer/VBoxContainer/Button" to="." method="_greifer_auf"]
 [connection signal="button_up" from="VBoxContainer/HBoxContainer/VBoxContainer/Button" to="." method="_greifer_stop"]
 [connection signal="button_down" from="VBoxContainer/HBoxContainer/VBoxContainer/Button2" to="." method="_greifer_zu"]

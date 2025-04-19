@@ -8,7 +8,9 @@ var ml
 var mr
 var a
 var l
-var connected = true
+var connected = false
+var connecting = true
+var lastPing = -1
 var streaming = false
 
 func _ready():
@@ -16,21 +18,42 @@ func _ready():
 	#peer.set_dest_address("10.42.0.1", 5000)
 	if not connected: %StatusColor.color = Color.DARK_RED
 	peer.set_dest_address("192.168.178.105", 5000)
-	while not connected:
-		sendToPi("handshake")
-		await get_tree().create_timer(.1).timeout
-		if peer.get_available_packet_count() > 0:
-			print(peer.get_packet().get_string_from_utf8())
-			%StatusColor.color = Color.WEB_GREEN
-			connected = true
+	handleConnection()
+
+func handleConnection():
+	while true:
+		if connecting:
+			match connected:
+				true:
+					if lastPing >= 500:
+							sendToPi("ping")
+					if peer.get_available_packet_count() > 0:
+						match peer.get_packet().get_string_from_utf8():
+							"ping":
+								print("ping recieved")
+								lastPing = 0
+						
+				false:
+					%StatusColor.color = Color.DARK_RED
+					sendToPi("ping")
+					if peer.get_packet().get_string_from_utf8() == "ping":
+						%StatusColor.color = Color.WEB_GREEN
+						connected = true
+						lastPing = 0
+			await get_tree().create_timer(.1).timeout
 
 func _process(delta:float):
 	pass
 	
 func _physics_process(delta: float):
-	if peer.get_available_packet_count() > 0:
-		print("recieved: %s" % peer.get_packet().get_string_from_utf8())
-	
+	#tickrate = 25/s
+	lastPing += 40
+	if lastPing > 4000:
+		connected = false
+	%LastPingLabel.text = str(lastPing)
+#	if peer.get_available_packet_count() > 0:
+		#print("recieved: %s" % peer.get_packet().get_string_from_utf8())
+
 func _input(event: InputEvent) -> void:
 	a = joystick1.output.angle()
 	l = joystick1.output.length()
@@ -65,14 +88,14 @@ func _on_streaming_toggled(toggled_on: bool) -> void:
 		%Video.getFrame()
 		print("frame")	
 
-
 func _greifer_auf() -> void:
 	sendToPi("greifer#-1")
-
 
 func _greifer_zu() -> void:
 	sendToPi("greifer#1")
 
-
 func _greifer_stop() -> void:
 	sendToPi("greifer#0")
+
+func _on_connection_toggle(toggled_on: bool) -> void:
+	connecting = toggled_on
