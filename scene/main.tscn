@@ -1,9 +1,33 @@
-[gd_scene load_steps=5 format=3 uid="uid://d0ykwxea8l0d5"]
+[gd_scene load_steps=15 format=3 uid="uid://d0ykwxea8l0d5"]
 
 [ext_resource type="Script" uid="uid://2cm5svv2xo65" path="res://script/main.gd" id="1_itxqv"]
 [ext_resource type="Theme" uid="uid://riggg7154rx2" path="res://theme.tres" id="2_v0l8b"]
 [ext_resource type="Script" uid="uid://c1e4ekc8iyqvh" path="res://script/cameraStream.gd" id="3_brvut"]
+[ext_resource type="Script" uid="uid://cbad2q3rvv5v3" path="res://script/progressBarColorChanger.gd" id="4_0ha60"]
 [ext_resource type="PackedScene" uid="uid://dmr0fcamx7t56" path="res://addons/virtual_joystick/virtual_joystick_scene.tscn" id="5_0ha60"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b5f6u"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tqoya"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k65ib"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wscrc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p1hux"]
+bg_color = Color(1, 0.26, 0.26, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4j5ol"]
+bg_color = Color(1, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0ha60"]
+bg_color = Color(1, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_of57s"]
+bg_color = Color(0.54, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_brvut"]
+bg_color = Color(0.78, 0, 0, 1)
 
 [node name="Interface" type="Control" node_paths=PackedStringArray("joystick1", "joystick2")]
 layout_mode = 3
@@ -30,7 +54,7 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.2
-theme_override_font_sizes/normal_font_size = 111
+theme = ExtResource("2_v0l8b")
 text = "Rover K.O.N.R.A.D. Fernsteuerung"
 fit_content = true
 horizontal_alignment = 1
@@ -47,8 +71,6 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -2160.0
-offset_bottom = -487.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 3
@@ -59,40 +81,56 @@ script = ExtResource("3_brvut")
 [node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/HBoxContainer2"]
+[node name="VorneLinks" type="ProgressBar" parent="VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 size_flags_horizontal = 3
+theme = ExtResource("2_v0l8b")
+theme_override_styles/background = SubResource("StyleBoxFlat_b5f6u")
 max_value = 1.0
 fill_mode = 3
 show_percentage = false
+script = ExtResource("4_0ha60")
 
-[node name="ProgressBar2" type="ProgressBar" parent="VBoxContainer/HBoxContainer2"]
+[node name="VorneRechts" type="ProgressBar" parent="VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 size_flags_horizontal = 3
+theme = ExtResource("2_v0l8b")
+theme_override_styles/background = SubResource("StyleBoxFlat_tqoya")
 max_value = 1.0
 fill_mode = 3
 show_percentage = false
+script = ExtResource("4_0ha60")
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="ProgressBar3" type="ProgressBar" parent="VBoxContainer/HBoxContainer3"]
+[node name="HintenLinks" type="ProgressBar" parent="VBoxContainer/HBoxContainer3"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 size_flags_horizontal = 3
+theme = ExtResource("2_v0l8b")
+theme_override_styles/background = SubResource("StyleBoxFlat_k65ib")
 max_value = 1.0
 fill_mode = 2
 show_percentage = false
+script = ExtResource("4_0ha60")
 
-[node name="ProgressBar4" type="ProgressBar" parent="VBoxContainer/HBoxContainer3"]
+[node name="HintenRechts" type="ProgressBar" parent="VBoxContainer/HBoxContainer3"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 size_flags_horizontal = 3
+theme = ExtResource("2_v0l8b")
+theme_override_styles/background = SubResource("StyleBoxFlat_wscrc")
 max_value = 1.0
 fill_mode = 2
 show_percentage = false
+script = ExtResource("4_0ha60")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -100,7 +138,7 @@ size_flags_vertical = 3
 theme = ExtResource("2_v0l8b")
 
 [node name="Virtual Joystick" parent="VBoxContainer/HBoxContainer" instance=ExtResource("5_0ha60")]
-custom_minimum_size = Vector2(500, 500)
+custom_minimum_size = Vector2(600, 600)
 layout_mode = 2
 
 [node name="HBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
@@ -112,6 +150,7 @@ theme = ExtResource("2_v0l8b")
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_v0l8b")
+button_pressed = true
 action_mode = 0
 text = "streamen"
 alignment = 1
@@ -122,7 +161,7 @@ size_flags_horizontal = 3
 theme = ExtResource("2_v0l8b")
 button_pressed = true
 action_mode = 0
-text = "verbinden"
+text = "pingen"
 alignment = 1
 
 [node name="LastPingLabel" type="RichTextLabel" parent="VBoxContainer/HBoxContainer/HBoxContainer"]
@@ -130,29 +169,47 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("2_v0l8b")
+text = "ping"
 fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
+[node name="StopButton" type="Button" parent="VBoxContainer/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+theme = ExtResource("2_v0l8b")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_p1hux")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_4j5ol")
+theme_override_styles/hover = SubResource("StyleBoxFlat_0ha60")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_of57s")
+theme_override_styles/normal = SubResource("StyleBoxFlat_brvut")
+text = "STOP"
+
+[node name="GreiferButtons" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="auf" type="Button" parent="VBoxContainer/HBoxContainer/GreiferButtons"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "auf"
 
-[node name="Button2" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="zu" type="Button" parent="VBoxContainer/HBoxContainer/GreiferButtons"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "zu"
 
 [node name="Virtual Joystick2" parent="VBoxContainer/HBoxContainer" instance=ExtResource("5_0ha60")]
-custom_minimum_size = Vector2(500, 500)
+custom_minimum_size = Vector2(600, 600)
 layout_mode = 2
 
-[connection signal="toggled" from="VBoxContainer/HBoxContainer/HBoxContainer/StreamToggle" to="." method="_on_streaming_toggled"]
+[connection signal="gui_input" from="VBoxContainer/HBoxContainer/Virtual Joystick" to="." method="_on_joystick1_input"]
+[connection signal="toggled" from="VBoxContainer/HBoxContainer/HBoxContainer/StreamToggle" to="VBoxContainer/StatusColor/Video" method="_on_streaming_toggled"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/HBoxContainer/ConnectionToggle" to="." method="_on_connection_toggle"]
-[connection signal="button_down" from="VBoxContainer/HBoxContainer/VBoxContainer/Button" to="." method="_greifer_auf"]
-[connection signal="button_up" from="VBoxContainer/HBoxContainer/VBoxContainer/Button" to="." method="_greifer_stop"]
-[connection signal="button_down" from="VBoxContainer/HBoxContainer/VBoxContainer/Button2" to="." method="_greifer_zu"]
-[connection signal="button_up" from="VBoxContainer/HBoxContainer/VBoxContainer/Button2" to="." method="_greifer_stop"]
+[connection signal="button_down" from="VBoxContainer/HBoxContainer/HBoxContainer/StopButton" to="." method="_on_stop_button_down"]
+[connection signal="button_down" from="VBoxContainer/HBoxContainer/GreiferButtons/auf" to="." method="_greifer_auf"]
+[connection signal="button_up" from="VBoxContainer/HBoxContainer/GreiferButtons/auf" to="." method="_greifer_stop"]
+[connection signal="button_down" from="VBoxContainer/HBoxContainer/GreiferButtons/zu" to="." method="_greifer_zu"]
+[connection signal="button_up" from="VBoxContainer/HBoxContainer/GreiferButtons/zu" to="." method="_greifer_stop"]
+[connection signal="gui_input" from="VBoxContainer/HBoxContainer/Virtual Joystick2" to="." method="_on_joystick_2_input"]

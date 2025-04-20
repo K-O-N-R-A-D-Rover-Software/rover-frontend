@@ -1,4 +1,46 @@
-[gd_resource type="Theme" load_steps=3 format=3 uid="uid://riggg7154rx2"]
+[gd_resource type="Theme" load_steps=12 format=3 uid="uid://riggg7154rx2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mihib"]
+bg_color = Color(0.2, 0.2, 0.2, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vj6dk"]
+bg_color = Color(0.587632, 0.190596, 0.171137, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_110ce"]
+bg_color = Color(1, 1, 1, 0.147)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_05tig"]
+bg_color = Color(1, 1, 1, 0.0784314)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ttqs8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1rmny"]
+bg_color = Color(0.58, 0.0812, 0.0812, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wvktn"]
+bg_color = Color(0.155, 0.62, 0.24025, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wdt2l"]
+bg_color = Color(0.2, 0.2, 0.2, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yin2u"]
+bg_color = Color(1, 0.835, 0.34, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e1x85"]
 content_margin_left = 4.0
@@ -24,8 +66,20 @@ corner_radius_bottom_left = 4
 
 [resource]
 BoxContainer/constants/separation = 10
-Button/font_sizes/font_size = 42
-CheckButton/font_sizes/font_size = 45
+Button/font_sizes/font_size = 71
+Button/styles/normal = SubResource("StyleBoxFlat_mihib")
+Button/styles/pressed = null
+CheckButton/colors/font_color = Color(1, 1, 1, 1)
+CheckButton/font_sizes/font_size = 60
+CheckButton/styles/disabled = SubResource("StyleBoxFlat_vj6dk")
+CheckButton/styles/focus = SubResource("StyleBoxFlat_110ce")
+CheckButton/styles/hover = SubResource("StyleBoxFlat_05tig")
+CheckButton/styles/hover_pressed = SubResource("StyleBoxFlat_ttqs8")
+CheckButton/styles/normal = SubResource("StyleBoxFlat_1rmny")
+CheckButton/styles/pressed = SubResource("StyleBoxFlat_wvktn")
+ProgressBar/styles/background = SubResource("StyleBoxFlat_wdt2l")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_yin2u")
+RichTextLabel/font_sizes/normal_font_size = 48
 VSlider/styles/grabber_area = null
 VSlider/styles/grabber_area_highlight = SubResource("StyleBoxFlat_e1x85")
 VSlider/styles/slider = SubResource("StyleBoxFlat_cjfk0")

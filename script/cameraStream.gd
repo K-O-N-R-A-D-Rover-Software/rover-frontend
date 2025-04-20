@@ -4,23 +4,28 @@ var image = Image.new()
 
 var index = 0
 
+var streaming = false
+
+var http_request
+
 func _ready():
-	pass
 	# Create an HTTP request node and connect its completion signal.
-		
-func getFrame():
-	var http_request = HTTPRequest.new()
+	http_request = HTTPRequest.new()
 	add_child(http_request)
 	http_request.request_completed.connect(self._http_request_completed)
+	
+func _physics_process(delta: float) -> void:
+	if streaming:
+		getFrame()
+		
+func getFrame():
 	var error
 	match index:
 		0:
-			error = http_request.request("http://raspi.local:1984/api/stream.mjpeg?src=1")
-			index = 0
+			error = http_request.request("http://roverpi.local:1984/api/stream.mjpeg?src=mjpeg0")
 		1:
-			error = http_request.request("http://roverpi.local:1984/api/frame.jpeg?src=2")
-			index = 0
-#	var error = http_request.request("https://fastly.picsum.photos/id/316/200/200.jpg?hmac=f0i62VkjVy8OPLP77Xf7mdZa3UBNlTOXFm9WpDMOiiA")
+			error = http_request.request("http://roverpi.local:1984/api/frame.jpeg?src=mjpeg1")
+	error = http_request.request("https://fastly.picsum.photos/id/316/200/200.jpg?hmac=f0i62VkjVy8OPLP77Xf7mdZa3UBNlTOXFm9WpDMOiiA")
 	if error != OK:
 		push_error("An error occurred in the HTTP request.")
 	elif error == OK:
@@ -35,3 +40,7 @@ func _http_request_completed(result, response_code, headers, body):
 		push_error("Couldn't load the image.")
 	texture = ImageTexture.create_from_image(image)
 	print(result)
+
+
+func _on_streaming_toggled(toggled_on: bool) -> void:
+	streaming = toggled_on
