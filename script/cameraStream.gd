@@ -22,7 +22,7 @@ func getFrame():
 	var error
 	match index:
 		0:
-			error = http_request.request("http://roverpi.local:1984/api/stream.mjpeg?src=mjpeg0")
+			error = http_request.request("http://roverpi.local:1984/api/frame.jpeg?src=mjpeg2")
 		1:
 			error = http_request.request("http://roverpi.local:1984/api/frame.jpeg?src=mjpeg1")
 	error = http_request.request("https://fastly.picsum.photos/id/316/200/200.jpg?hmac=f0i62VkjVy8OPLP77Xf7mdZa3UBNlTOXFm9WpDMOiiA")

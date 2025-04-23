@@ -11,27 +11,34 @@ var l
 var x
 var y
 var connected = false
-var connecting = true
+var connecting = false
 var timer
 var lastPing = -1
 var lastCommand = "ping"
+var packet
 
 func _ready():
 	#peer.set_dest_address("127.0.0.1", 5000)
 	#peer.set_dest_address("10.42.0.1", 5000)
 	if not connected: %StatusColor.color = Color.DARK_RED
-	peer.set_dest_address("192.168.178.105", 5000)
+	peer.set_dest_address("192.168.36.202", 5000)
 	sendToPi("handshake")
 	handleConnection()
 
 func handleConnection():
 	while connecting:
-		sendToPi("ping")
 		match connected:
 			true:
-				if peer.get_packet().get_string_from_utf8() == "ping":
-					print("ping recieved")
-					lastPing = 0
+				if peer.get_available_packet_count() > 0:
+					for i in peer.get_available_packet_count():
+						packet = peer.get_packet().get_string_from_utf8().split("#")
+						match packet[0]:
+							"ping":
+								print("ping recieved")
+								lastPing = 0
+							"mess":
+								print("messwert")
+								%SensorData.set_data(packet[1],packet[2],packet[3],packet[4])
 			false:
 				%StatusColor.color = Color.DARK_RED
 				sendToPi("handshake")
@@ -40,7 +47,7 @@ func handleConnection():
 					%StatusColor.color = Color.WEB_GREEN
 					connected = true
 					lastPing = 0
-		await get_tree().create_timer(.4).timeout
+		await get_tree().create_timer(.2).timeout
 
 func _process(delta:float):
 	pass
@@ -52,8 +59,6 @@ func _physics_process(delta: float):
 	if lastPing > 4000:
 		connected = false
 	%LastPingLabel.text = "Ping: "+str(lastPing)+"ms"
-#	if peer.get_available_packet_count() > 0:
-		#print("recieved: %s" % peer.get_packet().get_string_from_utf8())
 
 func sendToPi(data: String):
 	if data != lastCommand:
@@ -98,13 +103,13 @@ func _on_joystick1_input(event: InputEvent) -> void:
 	if %VorneRechts.active:
 		m2 = mr
 	if %HintenLinks.active:
-		m3 = -ml
+		m3 = ml
 	if %HintenRechts.active:
-		m4 = -mr
-	%VorneLinks.value = m1
-	%VorneRechts.value = m2
-	%HintenLinks.value = m3
-	%HintenRechts.value = m4
+		m4 = mr
+	%VorneLinks.new_value(m1)
+	%VorneRechts.new_value(m2)
+	%HintenLinks.new_value(m3)
+	%HintenRechts.new_value(m4)
 	setDrivingMotors(m1,m2,m3,m4)
 
 func setDrivingMotors(m1:float, m2:float,m3:float,m4:float):
@@ -114,3 +119,7 @@ func setDrivingMotors(m1:float, m2:float,m3:float,m4:float):
 func _on_stop_button_down() -> void:
 	sendToPi("stop")
 	pass # Replace with function body.
+
+
+func _on_distance_reset() -> void:
+	sendToPi("distreset")

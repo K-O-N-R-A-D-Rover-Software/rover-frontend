@@ -33,7 +33,6 @@ theme/custom="uid://riggg7154rx2"
 [input_devices]
 
 pointing/emulate_touch_from_mouse=true
-pointing/emulate_mouse_from_touch=false
 
 [physics]
 
