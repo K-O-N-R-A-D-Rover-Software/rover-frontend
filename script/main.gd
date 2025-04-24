@@ -2,6 +2,8 @@ extends Node
 
 var peer = PacketPeerUDP.new()
 
+var pingThread: Thread
+
 @export var joystick1: VirtualJoystick
 @export var joystick2: VirtualJoystick
 var ml
@@ -10,62 +12,76 @@ var a
 var l
 var x
 var y
+var connecting = true
 var connected = false
-var connecting = false
 var timer
 var lastPing = -1
-var lastCommand = "ping"
+var lastCommand = ""
+var newCommand = "ping"
 var packet
 
 func _ready():
 	#peer.set_dest_address("127.0.0.1", 5000)
 	#peer.set_dest_address("10.42.0.1", 5000)
 	if not connected: %StatusColor.color = Color.DARK_RED
-	peer.set_dest_address("192.168.36.202", 5000)
-	sendToPi("handshake")
-	handleConnection()
+	peer.set_dest_address("roverpi.local", 5000)
+	if connecting: handleConnection()
+	
+func startPinging():
+	peer.set_dest_address("roverpi.local", 5000)
+	pingThread = Thread.new()
+	pingThread.start(ping.bind())
+	
+func stopPinging():
+	if pingThread.is_alive():
+		pingThread.wait_to_finish()
+
+func ping():
+	while connecting:
+		sendToPi("ping")
+		await get_tree().create_timer(.5).timeout
+
 
 func handleConnection():
+	startPinging()
 	while connecting:
 		match connected:
 			true:
-				if peer.get_available_packet_count() > 0:
-					for i in peer.get_available_packet_count():
-						packet = peer.get_packet().get_string_from_utf8().split("#")
-						match packet[0]:
-							"ping":
-								print("ping recieved")
-								lastPing = 0
-							"mess":
-								print("messwert")
-								%SensorData.set_data(packet[1],packet[2],packet[3],packet[4])
+				for i in peer.get_available_packet_count():
+					packet = peer.get_packet().get_string_from_utf8().split("#")
+					print(packet)
+					match packet[0]:
+						"ping":
+							print("recieved ping")
+							lastPing = 0
+						"mess":
+							print("messwert")
+							%SensorData.set_data(packet[1],packet[2],packet[3],packet[4])
 			false:
 				%StatusColor.color = Color.DARK_RED
 				sendToPi("handshake")
-				sendToPi("ping")
 				if peer.get_packet().get_string_from_utf8() == "ping":
 					%StatusColor.color = Color.WEB_GREEN
 					connected = true
 					lastPing = 0
-		await get_tree().create_timer(.2).timeout
+				await get_tree().create_timer(.1).timeout
+		await get_tree().create_timer(.1).timeout
+	stopPinging()
 
-func _process(delta:float):
-	pass
-	
 func _physics_process(delta: float):
-	#tickrate = 20/s
-	sendToPi(lastCommand)
-	lastPing += 50
+	#tickrate = 25/s
+	if newCommand != lastCommand:
+		sendToPi(newCommand)
+	lastCommand = newCommand
+	lastPing += 40
 	if lastPing > 4000:
 		connected = false
 	%LastPingLabel.text = "Ping: "+str(lastPing)+"ms"
 
+
 func sendToPi(data: String):
-	if data != lastCommand:
-		peer.put_packet(data.to_utf8_buffer())
-		print(data)
-	if data != "ping" and data != "handshake":
-		lastCommand = data
+	peer.put_packet(data.to_utf8_buffer())
+	print(data)
 
 func _greifer_auf() -> void:
 	sendToPi("greifer#-1")
@@ -78,9 +94,7 @@ func _greifer_stop() -> void:
 
 func _on_connection_toggle(toggled_on: bool) -> void:
 	connecting = toggled_on
-	if connecting:
-		handleConnection()
-
+	if connecting: handleConnection()
 
 func _on_joystick_2_input(event: InputEvent) -> void:
 	x = joystick2.output.x
@@ -114,12 +128,10 @@ func _on_joystick1_input(event: InputEvent) -> void:
 
 func setDrivingMotors(m1:float, m2:float,m3:float,m4:float):
 	# vorne links, vorne rechts, hinten links, hinten rechts
-	sendToPi("motors#"+str(m1)+"#"+str(m2)+"#"+str(m3)+"#"+str(m4))
+	newCommand = ("motors#"+str(m1)+"#"+str(m2)+"#"+str(m3)+"#"+str(m4))
 
 func _on_stop_button_down() -> void:
 	sendToPi("stop")
-	pass # Replace with function body.
-
 
 func _on_distance_reset() -> void:
 	sendToPi("distreset")

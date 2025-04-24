@@ -1,17 +1,20 @@
 extends TextureRect
 
-var streaming = true
+var streaming = false
 
-var host_ip = "roverpi.local"
+var thread: Thread
+
 var port = 1984
-var path = "/api/stream.mjpeg?src=mjpeg0"
+var streamnumber = 0
+var path = "/api/stream.mjpeg?src=mjpeg"
+var host = "roverpi.local"
 
 var tcp_client: StreamPeerTCP = StreamPeerTCP.new()
 var buffer = PackedByteArray() # Data buffer for incremental reading
 
 var tex = ImageTexture.new()
 
-var lastSize = 1000000
+var lastSize = 500000
 
 var utf8dict = {
 	32: " ",
@@ -84,6 +87,13 @@ var utf8dict = {
 	122: "z",
 }
 
+func _ready():
+	if streaming:
+		print("stream")
+		if await connect_to_host():
+			request_mjpeg_stream()
+	# Change these values to match your MJPEG stream server's IP, port, and path.
+
 func decode(data: PackedByteArray) -> String:
 	var output = ""
 	for symbol in data:
@@ -94,10 +104,11 @@ func decode(data: PackedByteArray) -> String:
 	return output
 
 # Connect to the MJPEG stream server
-func connect_to_host(ip: String, port: int) -> bool:
-	print("connect")
+func connect_to_host() -> bool:
+	print("connecting")
+	tcp_client = StreamPeerTCP.new()
 	tcp_client.set_no_delay(true)
-	var err = await tcp_client.connect_to_host(ip, port)
+	var err = await tcp_client.connect_to_host(host, 1984)
 	print(err)
 	print(tcp_client.get_status())
 	print(tcp_client.get_connected_host())
@@ -115,82 +126,72 @@ func connect_to_host(ip: String, port: int) -> bool:
 		push_error("Not connected")
 		return false
 
-	print("Connected to ", ip, ":", port)
+	print("Connected to ", host, ":")
 	return true
 
 # Send an HTTP GET request to start the MJPEG stream.
-func request_mjpeg_stream(path: String, host: String):
+func request_mjpeg_stream():
 	print("req")
-	var request = "GET " + path + " HTTP/1.1\r\n"
+	var request = "GET " + path + str(streamnumber) + " HTTP/1.1\r\n"
 	request += "Host: " + host + "\r\n"
 	request += "Accept: multipart/x-mixed-replace\r\n"
 	request += "Connection: keep-alive\r\n\r\n"
 	
 	var data = request.to_utf8_buffer()
 	tcp_client.set_no_delay(true)
-	var bytes_sent = tcp_client.put_data(data)
+	var error = tcp_client.put_data(data)
 	tcp_client.poll()
-	print("error ",bytes_sent)
+	print("request error ",error)
+	thread = Thread.new()
+	thread.start(stream.bind())
 
 
-
-func fill_buffer():
-	var bytes = tcp_client.get_available_bytes()
-	print("available bytes: ",bytes)
-	var chunk = tcp_client.get_data(bytes)
-	tcp_client.poll()
-	if chunk.size() > 0:
-		#print("chunk ", chunk)
-		buffer.append_array(chunk[1])
-		print("buffer length: ",buffer.size())
-		if buffer.size() > lastSize+20000:
-			var offset = 0
-			var found = false
-			var i = 0
-			while !found and offset < buffer.size():
-				i = buffer.find(76, offset)
-				if buffer[i+1] == 101:
-					if buffer[i+2] == 110:
-						if buffer[i+3] == 103:
-							if buffer[i+4] == 116:
-								if buffer[i+5] == 104:
-									found = true
-								else: offset = i+1
-							else: offset = i+1
+func stream():
+	print("stream")
+	while streaming:
+		var bytes = tcp_client.get_available_bytes()
+		var chunk = tcp_client.get_data(bytes)
+		tcp_client.poll()
+		if chunk.size() > 0:
+			#print("chunk ", chunk)
+			buffer.append_array(chunk[1])
+			print("buffer length: ",buffer.size())
+			if buffer.size() > lastSize+20000:
+				var offset = 0
+				var found = false
+				var i = 0
+				while !found and offset < buffer.size():
+					i = buffer.find(76, offset)
+					if buffer[i+1] == 101:
+						if buffer[i+2] == 110:
+										found = true
 						else: offset = i+1
 					else: offset = i+1
-				else: offset = i+1
-			print("gefunden")
-			var stringsize = decode(buffer.slice(i+8, i+14))
-			lastSize = int(stringsize)
-			print("content size: ",lastSize)
-			buffer = buffer.slice(i, i+15+lastSize)
-			var image = Image.new()
-			var error = image.load_jpg_from_buffer(buffer)
-			if error == 0:
-				print("setting image")
-				tex.set_image(image)
-				self.set_texture(tex.create_from_image(image))
-				buffer.clear()
-
-func _process(delta):
-	pass
-	# In a real application you would probably call process_stream() in _process
-	# or in a separate thread, to continuously handle incoming data.
-
-func _physics_process(delta: float) -> void:
-	if streaming:
-		fill_buffer()
-	#process_stream()
-
-func _ready():
-	if streaming:
-		print("stream")
-		if await connect_to_host(host_ip, port):
-			request_mjpeg_stream(path, host_ip)
-	await get_tree().create_timer(5).timeout
-	# Change these values to match your MJPEG stream server's IP, port, and path.
+					
+				var stringsize = decode(buffer.slice(i+8, i+14))
+				lastSize = int(stringsize)
+				print("content size: ",lastSize)
+				buffer = buffer.slice(i, i+15+lastSize)
+				var image = Image.new()
+				var error = image.load_jpg_from_buffer(buffer)
+				if error == 0:
+					tex.set_image(image)
+					self.set_texture(tex.create_from_image(image))
+					buffer.clear()
+		await get_tree().create_timer(.032).timeout
+	return
 
 
 func _on_streaming_toggled(toggled_on: bool) -> void:
 	streaming = toggled_on
+
+func _on_camera_changed() -> void:
+	streaming = false
+	if thread and thread.is_started():
+		thread.wait_to_finish()
+	streamnumber = (streamnumber+1)%3
+	print(streamnumber)
+	await get_tree().create_timer(.5).timeout
+	streaming = true
+	if await connect_to_host():
+		request_mjpeg_stream()

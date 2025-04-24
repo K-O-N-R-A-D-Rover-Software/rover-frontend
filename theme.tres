@@ -1,4 +1,6 @@
-[gd_resource type="Theme" load_steps=12 format=3 uid="uid://riggg7154rx2"]
+[gd_resource type="Theme" load_steps=13 format=3 uid="uid://riggg7154rx2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wvktn"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mihib"]
 bg_color = Color(0.2, 0.2, 0.2, 1)
@@ -67,6 +69,7 @@ corner_radius_bottom_left = 4
 [resource]
 BoxContainer/constants/separation = 10
 Button/font_sizes/font_size = 71
+Button/styles/focus = SubResource("StyleBoxEmpty_wvktn")
 Button/styles/normal = SubResource("StyleBoxFlat_mihib")
 Button/styles/pressed = null
 CheckButton/colors/font_color = Color(1, 1, 1, 1)

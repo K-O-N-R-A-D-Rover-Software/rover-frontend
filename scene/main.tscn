@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://d0ykwxea8l0d5"]
+[gd_scene load_steps=24 format=3 uid="uid://d0ykwxea8l0d5"]
 
 [ext_resource type="Script" uid="uid://2cm5svv2xo65" path="res://script/main.gd" id="1_itxqv"]
 [ext_resource type="Theme" uid="uid://riggg7154rx2" path="res://theme.tres" id="2_v0l8b"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://cbad2q3rvv5v3" path="res://script/progressBarColorChanger.gd" id="4_0ha60"]
 [ext_resource type="Script" uid="uid://bheu38dwckwj3" path="res://script/mjpegStreamer.gd" id="4_4j5ol"]
 [ext_resource type="PackedScene" uid="uid://dmr0fcamx7t56" path="res://addons/virtual_joystick/virtual_joystick_scene.tscn" id="5_0ha60"]
+[ext_resource type="Texture2D" uid="uid://dboo6qpeej74y" path="res://assets/camera-rotate.png" id="5_b5f6u"]
 [ext_resource type="Texture2D" uid="uid://cw8kqrngksg74" path="res://assets/symbole.png" id="7_p1hux"]
 [ext_resource type="Script" uid="uid://tk8nxvljomf8" path="res://scene/sensor_data.gd" id="8_of57s"]
 
@@ -16,6 +17,13 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k65ib"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v2gmf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_smf0o"]
+bg_color = Color(0, 0, 0, 0.294118)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tqoya"]
 
@@ -66,6 +74,39 @@ layout_mode = 2
 theme = ExtResource("2_v0l8b")
 theme_override_font_sizes/normal_font_size = 91
 text = "Rover K.O.N.R.A.D. Fernsteuerung"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="dev" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_v0l8b")
+
+[node name="StreamToggle" type="CheckButton" parent="VBoxContainer/dev"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_v0l8b")
+button_pressed = true
+action_mode = 0
+text = "streamen"
+alignment = 1
+
+[node name="ConnectionToggle" type="CheckButton" parent="VBoxContainer/dev"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_v0l8b")
+button_pressed = true
+action_mode = 0
+text = "pingen"
+alignment = 1
+
+[node name="LastPingLabel" type="RichTextLabel" parent="VBoxContainer/dev"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("2_v0l8b")
+text = "ping"
 fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -126,8 +167,24 @@ expand_mode = 2
 stretch_mode = 5
 script = ExtResource("4_4j5ol")
 
+[node name="Button" type="Button" parent="VBoxContainer/oben/StatusColor/Video mjpeg"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_top = -200.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_smf0o")
+icon = ExtResource("5_b5f6u")
+icon_alignment = 1
+
 [node name="Video" type="TextureRect" parent="VBoxContainer/oben/StatusColor"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -178,40 +235,6 @@ theme = ExtResource("2_v0l8b")
 [node name="Virtual Joystick" parent="VBoxContainer/unten" instance=ExtResource("5_0ha60")]
 custom_minimum_size = Vector2(600, 600)
 layout_mode = 2
-
-[node name="HBoxContainer" type="VBoxContainer" parent="VBoxContainer/unten"]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-theme = ExtResource("2_v0l8b")
-
-[node name="StreamToggle" type="CheckButton" parent="VBoxContainer/unten/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme = ExtResource("2_v0l8b")
-button_pressed = true
-action_mode = 0
-text = "streamen"
-alignment = 1
-
-[node name="ConnectionToggle" type="CheckButton" parent="VBoxContainer/unten/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme = ExtResource("2_v0l8b")
-button_pressed = true
-action_mode = 0
-text = "pingen"
-alignment = 1
-
-[node name="LastPingLabel" type="RichTextLabel" parent="VBoxContainer/unten/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 3
-theme = ExtResource("2_v0l8b")
-text = "ping"
-fit_content = true
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/unten"]
 layout_mode = 2
@@ -280,10 +303,11 @@ text = "zu"
 custom_minimum_size = Vector2(600, 600)
 layout_mode = 2
 
+[connection signal="toggled" from="VBoxContainer/dev/StreamToggle" to="VBoxContainer/oben/StatusColor/Video mjpeg" method="_on_streaming_toggled"]
+[connection signal="toggled" from="VBoxContainer/dev/StreamToggle" to="VBoxContainer/oben/StatusColor/Video" method="_on_streaming_toggled"]
+[connection signal="toggled" from="VBoxContainer/dev/ConnectionToggle" to="." method="_on_connection_toggle"]
+[connection signal="pressed" from="VBoxContainer/oben/StatusColor/Video mjpeg/Button" to="VBoxContainer/oben/StatusColor/Video mjpeg" method="_on_camera_changed"]
 [connection signal="gui_input" from="VBoxContainer/unten/Virtual Joystick" to="." method="_on_joystick1_input"]
-[connection signal="toggled" from="VBoxContainer/unten/HBoxContainer/StreamToggle" to="VBoxContainer/oben/StatusColor/Video mjpeg" method="_on_streaming_toggled"]
-[connection signal="toggled" from="VBoxContainer/unten/HBoxContainer/StreamToggle" to="VBoxContainer/oben/StatusColor/Video" method="_on_streaming_toggled"]
-[connection signal="toggled" from="VBoxContainer/unten/HBoxContainer/ConnectionToggle" to="." method="_on_connection_toggle"]
 [connection signal="pressed" from="VBoxContainer/unten/VBoxContainer/Button" to="." method="_on_distance_reset"]
 [connection signal="button_down" from="VBoxContainer/unten/VBoxContainer/StopButton" to="." method="_on_stop_button_down"]
 [connection signal="button_down" from="VBoxContainer/unten/GreiferButtons/auf" to="." method="_greifer_auf"]
