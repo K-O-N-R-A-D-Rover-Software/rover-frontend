@@ -24,11 +24,11 @@ func _ready():
 	#peer.set_dest_address("127.0.0.1", 5000)
 	#peer.set_dest_address("10.42.0.1", 5000)
 	if not connected: %StatusColor.color = Color.DARK_RED
-	peer.set_dest_address("roverpi.local", 5000)
+	peer.set_dest_address("10.42.0.1", 5000)
 	if connecting: handleConnection()
 	
 func startPinging():
-	peer.set_dest_address("roverpi.local", 5000)
+	peer.set_dest_address("10.42.0.1", 5000)
 	pingThread = Thread.new()
 	pingThread.start(ping.bind())
 	
@@ -38,6 +38,7 @@ func stopPinging():
 
 func ping():
 	while connecting:
+		print("pinging")
 		sendToPi("ping")
 		await get_tree().create_timer(.5).timeout
 
@@ -82,7 +83,7 @@ func _physics_process(delta: float):
 
 
 func sendToPi(data: String):
-	peer.put_packet(data.to_utf8_buffer())
+	var error = peer.put_packet(data.to_utf8_buffer())
 	print(data)
 
 func _greifer_auf() -> void:
@@ -101,7 +102,7 @@ func _on_connection_toggle(toggled_on: bool) -> void:
 func _on_joystick_2_input(event: InputEvent) -> void:
 	x = joystick2.output.x
 	y = -joystick2.output.y
-	newCommand = "arm#"+str(x)+"#"+str(y)
+	newCommand = "arm#"+str(-x)+"#"+str(y)
 
 func _on_joystick1_input(event: InputEvent) -> void:
 	a = joystick1.output.angle()
@@ -124,7 +125,7 @@ func _on_joystick1_input(event: InputEvent) -> void:
 	%VorneRechts.new_value(m2)
 	%HintenLinks.new_value(m3)
 	%HintenRechts.new_value(m4)
-	setDrivingMotors(m1,m2,m3,m4)
+	setDrivingMotors(m1,-m2,m3,-m4)
 
 func setDrivingMotors(m1:float, m2:float,m3:float,m4:float):
 	# vorne links, vorne rechts, hinten links, hinten rechts

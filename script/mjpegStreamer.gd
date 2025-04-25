@@ -7,7 +7,7 @@ var thread: Thread
 var port = 1984
 var streamnumber = 0
 var path = "/api/stream.mjpeg?src=mjpeg"
-var host = "roverpi.local"
+var host = "10.42.0.1"
 
 var tcp_client: StreamPeerTCP = StreamPeerTCP.new()
 var buffer = PackedByteArray() # Data buffer for incremental reading
