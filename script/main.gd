@@ -33,7 +33,7 @@ func startPinging():
 	pingThread.start(ping.bind())
 	
 func stopPinging():
-	if pingThread.is_alive():
+	if not pingThread.is_alive():
 		pingThread.wait_to_finish()
 
 func ping():
@@ -43,6 +43,7 @@ func ping():
 
 
 func handleConnection():
+	print("handle")
 	startPinging()
 	while connecting:
 		match connected:
@@ -57,6 +58,7 @@ func handleConnection():
 						"mess":
 							print("messwert")
 							%SensorData.set_data(packet[1],packet[2],packet[3],packet[4])
+							lastPing = 0
 			false:
 				%StatusColor.color = Color.DARK_RED
 				sendToPi("handshake")
@@ -99,9 +101,7 @@ func _on_connection_toggle(toggled_on: bool) -> void:
 func _on_joystick_2_input(event: InputEvent) -> void:
 	x = joystick2.output.x
 	y = -joystick2.output.y
-	# vorne links, vorne rechts, hinten links, hinten rechts
-	
-	sendToPi("arm#"+str(x)+"#"+str(y))
+	newCommand = "arm#"+str(x)+"#"+str(y)
 
 func _on_joystick1_input(event: InputEvent) -> void:
 	a = joystick1.output.angle()

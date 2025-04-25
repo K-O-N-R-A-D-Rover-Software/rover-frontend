@@ -1,6 +1,11 @@
-[gd_resource type="Theme" load_steps=13 format=3 uid="uid://riggg7154rx2"]
+[gd_resource type="Theme" load_steps=12 format=3 uid="uid://riggg7154rx2"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wvktn"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_110ce"]
+bg_color = Color(0, 0, 0, 0.294118)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_e1x85"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mihib"]
 bg_color = Color(0.2, 0.2, 0.2, 1)
@@ -15,14 +20,6 @@ corner_radius_top_left = 20
 corner_radius_top_right = 20
 corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_110ce"]
-bg_color = Color(1, 1, 1, 0.147)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_05tig"]
-bg_color = Color(1, 1, 1, 0.0784314)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ttqs8"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1rmny"]
 bg_color = Color(0.58, 0.0812, 0.0812, 1)
@@ -70,14 +67,12 @@ corner_radius_bottom_left = 4
 BoxContainer/constants/separation = 10
 Button/font_sizes/font_size = 71
 Button/styles/focus = SubResource("StyleBoxEmpty_wvktn")
+Button/styles/hover = SubResource("StyleBoxFlat_110ce")
+Button/styles/hover_pressed = SubResource("StyleBoxEmpty_e1x85")
 Button/styles/normal = SubResource("StyleBoxFlat_mihib")
-Button/styles/pressed = null
 CheckButton/colors/font_color = Color(1, 1, 1, 1)
 CheckButton/font_sizes/font_size = 60
 CheckButton/styles/disabled = SubResource("StyleBoxFlat_vj6dk")
-CheckButton/styles/focus = SubResource("StyleBoxFlat_110ce")
-CheckButton/styles/hover = SubResource("StyleBoxFlat_05tig")
-CheckButton/styles/hover_pressed = SubResource("StyleBoxFlat_ttqs8")
 CheckButton/styles/normal = SubResource("StyleBoxFlat_1rmny")
 CheckButton/styles/pressed = SubResource("StyleBoxFlat_wvktn")
 ProgressBar/styles/background = SubResource("StyleBoxFlat_wdt2l")

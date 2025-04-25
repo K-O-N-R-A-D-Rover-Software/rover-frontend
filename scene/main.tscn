@@ -1,8 +1,7 @@
-[gd_scene load_steps=24 format=3 uid="uid://d0ykwxea8l0d5"]
+[gd_scene load_steps=23 format=3 uid="uid://d0ykwxea8l0d5"]
 
 [ext_resource type="Script" uid="uid://2cm5svv2xo65" path="res://script/main.gd" id="1_itxqv"]
 [ext_resource type="Theme" uid="uid://riggg7154rx2" path="res://theme.tres" id="2_v0l8b"]
-[ext_resource type="Script" uid="uid://c1e4ekc8iyqvh" path="res://script/cameraStream.gd" id="3_brvut"]
 [ext_resource type="Script" uid="uid://cbad2q3rvv5v3" path="res://script/progressBarColorChanger.gd" id="4_0ha60"]
 [ext_resource type="Script" uid="uid://bheu38dwckwj3" path="res://script/mjpegStreamer.gd" id="4_4j5ol"]
 [ext_resource type="PackedScene" uid="uid://dmr0fcamx7t56" path="res://addons/virtual_joystick/virtual_joystick_scene.tscn" id="5_0ha60"]
@@ -86,7 +85,6 @@ theme = ExtResource("2_v0l8b")
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_v0l8b")
-button_pressed = true
 action_mode = 0
 text = "streamen"
 alignment = 1
@@ -181,20 +179,6 @@ grow_vertical = 0
 theme_override_styles/normal = SubResource("StyleBoxFlat_smf0o")
 icon = ExtResource("5_b5f6u")
 icon_alignment = 1
-
-[node name="Video" type="TextureRect" parent="VBoxContainer/oben/StatusColor"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_vertical = 3
-expand_mode = 2
-stretch_mode = 5
-script = ExtResource("3_brvut")
 
 [node name="BackMotors" type="VBoxContainer" parent="VBoxContainer/oben"]
 layout_mode = 2
@@ -304,7 +288,6 @@ custom_minimum_size = Vector2(600, 600)
 layout_mode = 2
 
 [connection signal="toggled" from="VBoxContainer/dev/StreamToggle" to="VBoxContainer/oben/StatusColor/Video mjpeg" method="_on_streaming_toggled"]
-[connection signal="toggled" from="VBoxContainer/dev/StreamToggle" to="VBoxContainer/oben/StatusColor/Video" method="_on_streaming_toggled"]
 [connection signal="toggled" from="VBoxContainer/dev/ConnectionToggle" to="." method="_on_connection_toggle"]
 [connection signal="pressed" from="VBoxContainer/oben/StatusColor/Video mjpeg/Button" to="VBoxContainer/oben/StatusColor/Video mjpeg" method="_on_camera_changed"]
 [connection signal="gui_input" from="VBoxContainer/unten/Virtual Joystick" to="." method="_on_joystick1_input"]

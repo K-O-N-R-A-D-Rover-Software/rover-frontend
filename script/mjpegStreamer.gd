@@ -12,9 +12,10 @@ var host = "roverpi.local"
 var tcp_client: StreamPeerTCP = StreamPeerTCP.new()
 var buffer = PackedByteArray() # Data buffer for incremental reading
 
+var image
 var tex = ImageTexture.new()
 
-var lastSize = 500000
+var lastSize = 200000
 
 var utf8dict = {
 	32: " ",
@@ -89,10 +90,8 @@ var utf8dict = {
 
 func _ready():
 	if streaming:
-		print("stream")
 		if await connect_to_host():
 			request_mjpeg_stream()
-	# Change these values to match your MJPEG stream server's IP, port, and path.
 
 func decode(data: PackedByteArray) -> String:
 	var output = ""
@@ -107,7 +106,6 @@ func decode(data: PackedByteArray) -> String:
 func connect_to_host() -> bool:
 	print("connecting")
 	tcp_client = StreamPeerTCP.new()
-	tcp_client.set_no_delay(true)
 	var err = await tcp_client.connect_to_host(host, 1984)
 	print(err)
 	print(tcp_client.get_status())
@@ -155,7 +153,7 @@ func stream():
 		if chunk.size() > 0:
 			#print("chunk ", chunk)
 			buffer.append_array(chunk[1])
-			print("buffer length: ",buffer.size())
+			#print("buffer length: ",buffer.size())
 			if buffer.size() > lastSize+20000:
 				var offset = 0
 				var found = false
@@ -170,28 +168,40 @@ func stream():
 					
 				var stringsize = decode(buffer.slice(i+8, i+14))
 				lastSize = int(stringsize)
-				print("content size: ",lastSize)
+				#print("content size: ",lastSize)
 				buffer = buffer.slice(i, i+15+lastSize)
-				var image = Image.new()
+				image = Image.new()
 				var error = image.load_jpg_from_buffer(buffer)
 				if error == 0:
 					tex.set_image(image)
 					self.set_texture(tex.create_from_image(image))
 					buffer.clear()
+				else:
+					print("image failure")
+					#change_camera()
 		await get_tree().create_timer(.032).timeout
 	return
 
 
 func _on_streaming_toggled(toggled_on: bool) -> void:
-	streaming = toggled_on
-
-func _on_camera_changed() -> void:
-	streaming = false
 	if thread and thread.is_started():
 		thread.wait_to_finish()
-	streamnumber = (streamnumber+1)%3
+	streaming = toggled_on
+	if await connect_to_host():
+		request_mjpeg_stream()
+		
+
+func change_camera():
+	streaming = false
+	if thread and not thread.is_alive():
+		thread.wait_to_finish()
+	streamnumber = (streamnumber+1)%4
 	print(streamnumber)
 	await get_tree().create_timer(.5).timeout
 	streaming = true
 	if await connect_to_host():
 		request_mjpeg_stream()
+	
+
+func _on_camera_changed() -> void:
+	change_camera()
